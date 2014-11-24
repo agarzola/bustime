@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/agarzola/bustime.git"
+    "url": "git://github.com/agarzola/bustime.js.git"
   },
   "keywords": [
     "bustime",
@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/agarzola/node-bustime/issues"
   },
-  "homepage": "https://github.com/agarzola/node-bustime"
+  "homepage": "https://github.com/agarzola/node-bustime",
+  "dependencies": {
+    "http": "0.0.0",
+    "querystring": "^0.2.0",
+    "xml2js": "^0.4.4"
+  }
 }
