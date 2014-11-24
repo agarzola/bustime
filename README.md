@@ -23,7 +23,7 @@ var apiObj = {
 var bustime = require('bustime')(apiObj);
 ```
 
-### In the browser
+<!-- ### In the browser
 Include bustime.js in your project, then:
 ```javascript
 var apiObj = {
@@ -34,7 +34,7 @@ var apiObj = {
 }
 
 var bustime = bustimeInit(apiObj);
-```
+``` -->
 
 ### Making requests
 ```javascript
