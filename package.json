@@ -1,0 +1,24 @@
+{
+  "name": "bustime",
+  "version": "0.1.0",
+  "description": "An abstraction of the Clever Devices BusTime developer API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/agarzola/bustime.git"
+  },
+  "keywords": [
+    "bustime",
+    "bustracker",
+    "clever"
+  ],
+  "author": "Alfonso Gómez-Arzola <alfonso@mrkp.co> (http://mrkp.co/)",
+  "license": "GNU GPL v2",
+  "bugs": {
+    "url": "https://github.com/agarzola/node-bustime/issues"
+  },
+  "homepage": "https://github.com/agarzola/node-bustime"
+}
