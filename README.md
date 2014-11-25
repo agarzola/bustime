@@ -33,12 +33,26 @@ var bustime = require('bustime')(apiObj);
 ## Request methods
 There are two ways to make requests to the API using this library:
 
-1. **Using a request type-specific method:** This is the preferred way if you’d like to use some of the added services that bustime.js offers for each. For example, the `bustime.predictions()` method could optionally calculate the ETA of each prediction for you and include that in a new `eta` property within each prediction. Not all methods will necessarily offer special services like that, but all request types have a dedicated method for the sake of consistency.
+1. **Using a request type-specific method:** This is the preferred way if you’d like to use the added services that bustime.js offers for each. For example, all request type-specific methods validate your request parameter object by default to avoid faulty requests made to the API (this can be turned off by on a per-method basis). Additionally, some of the methods offer special services that you can choose to turn on.
 2. **Using the `.request()` method:** This method makes a request to the API and converts the XML response into a JavaScript object. It offers nothing more than that. This is the method that each of the dedicated methods use to make requests before performing additional services.
 
 ---
 ### 1. Request type-specific methods
 Below are the methods dedicated to specific request types. Each has its own object property requirements. This object (sans special properties pertaining to bustime.js’ services) is translated directly to the querystring in the request to the API. See the [BusTime Developer API Guide](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf) for more information on each parameter.
+
+**A note on validation:** Each request type-specific method below validates your `reqObj` object by default. When your object fails validation, an error is returned to your callback and the request to the BusTime API is aborted. To turn off validation (not that you’d ever want to), include a `validate` property set to `false` within the `services` property of your request object, like so:
+```javascript
+var reqObj = {
+  // ... your other properties ... //
+  services: {
+    validate: false
+  }
+}
+```
+
+I’ve omitted the `validate` property from the descriptions below for the sake of being succinct. Just know that it’s available in each of these request type-specific methods.
+
+---
 
 #### .time(reqObj, callback(err, result))
 ```javascript
