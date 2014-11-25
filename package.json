@@ -16,7 +16,7 @@
     "clever"
   ],
   "author": "Alfonso Gómez-Arzola <alfonso@mrkp.co> (http://mrkp.co/)",
-  "license": "GNU GPL v2",
+  "license": "GPL-2.0",
   "bugs": {
     "url": "https://github.com/agarzola/node-bustime/issues"
   },
