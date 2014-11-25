@@ -7,15 +7,17 @@ An abstraction of the Clever Devices [BusTime API](http://bustracker.gocarta.org
 
 ---
 
+## Install
+```bash
+$ npm install bustime
+```
+_(You probably want to save it as a dependency, but I ain’t the boss of you.)_
+
 ## Usage
-bustime.js provides a simple abstraction of the BusTime API’s various endpoints. There are two ways to make requests to the API using this library:
-
-1. **Using a request type-specific method:** This is the preferred way if you’d like to use some of the added services that bustime.js offers for each. For example, the `bustime.predictions()` method could optionally calculate the ETA of each prediction for you and include that in a new `eta` property within each prediction. Not all methods will necessarily offer special services like that, but all request types have a dedicated method for the sake of consistency.
-2. **Using the `.request()` method:** This method makes a request to the API and converts the XML response into a JavaScript object. It offers nothing more than that. This is the method that each of the dedicated methods use to make requests before performing additional services.
-
-### Requiring in your node.js application
 Before you require bustime.js, you should create an object with at least your API key and the host. This object is then passed as an argument of require, like so:
 ```javascript
+var bustime = require('bustime');
+
 var apiObj = {
     key: 'your_api_key',       // required
     host: 'your_api_host.com', // required
@@ -28,8 +30,14 @@ var apiObj = {
 var bustime = require('bustime')(apiObj);
 ```
 
+## Request methods
+There are two ways to make requests to the API using this library:
+
+1. **Using a request type-specific method:** This is the preferred way if you’d like to use some of the added services that bustime.js offers for each. For example, the `bustime.predictions()` method could optionally calculate the ETA of each prediction for you and include that in a new `eta` property within each prediction. Not all methods will necessarily offer special services like that, but all request types have a dedicated method for the sake of consistency.
+2. **Using the `.request()` method:** This method makes a request to the API and converts the XML response into a JavaScript object. It offers nothing more than that. This is the method that each of the dedicated methods use to make requests before performing additional services.
+
 ---
-### Request-specific methods
+### 1. Request type-specific methods
 Below are the methods dedicated to specific request types. Each has its own object property requirements. This object (sans special properties pertaining to bustime.js’ services) is translated directly to the querystring in the request to the API. See the [BusTime Developer API Guide](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf) for more information on each parameter.
 
 #### .time(reqObj, callback(err, result))
@@ -173,11 +181,12 @@ bustime.serviceBulletins(reqObj, function (err, result) {
 Where `result` is an object with a `sb` property containing an array of bulletins, and an `error` property containing an array of errors. If only one bulletin or error object is returned, it is a direct child of the `sb` or `error` property (i.e. not an array).
 
 ---
-#### .request(requestType, reqObj, callback(err, result))
+### 2. Generic request method
 The generic request method offers a barebones API request and no special services. It is up to you to set the request type as a string in the first argument. Like the request type-specific methods, it responds with a JavaScript object.
 
-The generic `.request()` method might come in handy if you ever write your own BusTime-related methods and want to make them available for any request type (as opposed to limiting your method to, for example, only _predictions_ or only _stops_, for example). It might also come in handy if a future version of BusTime adds endpoints that this library doesn’t yet cover.
+The generic `.request()` method might come in handy if you write your own BusTime-related methods and want to make them available for more than one API request type (as opposed to limiting your method to, for example, only _predictions_ or only _stops_, for example). It could also be useful if a future version of BusTime adds endpoints that this library doesn’t yet cover.
 
+#### .request(requestType, reqObj, callback(err, result))
 ```javascript
 var reqObj = {}; // The contents of this object will depend on the type ↵
                  // of request you’ll be making to the BusTime API.
