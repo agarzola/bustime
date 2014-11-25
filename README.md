@@ -163,10 +163,7 @@ Special object properties are:
 var reqObj = {
   rt: route_number,     // required if stpid not specified
   rtdir: route_dir,     // optional, requires rt property
-  stpid: stop_id,       // required if rt not specified
-  services: {
-    calculateETA: false // optional, defaults to false
-  }
+  stpid: stop_id        // required if rt not specified
 }
 
 bustime.serviceBulletins(reqObj, function (err, result) {
