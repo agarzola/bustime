@@ -46,7 +46,7 @@ bustime.time(reqObj, function (err, result) {
 ```
 Where `result` is an object with a `tm` property containing the API’s time in YYYYMMDD HH:MM:SS format, and an `error` property containing an array of errors.
 
-Special object properties:
+Services available:
 - `moment`: Boolean, defaults to false. If true, includes the time as a [moment.js](http://momentjs.com/) object in `result.moment`.
 
 ---
@@ -154,7 +154,7 @@ Request object properties are:
 - `rt`: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'33,34'`)
 - `stpid`: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'897,899'`)
 
-Special object properties are:
+Services available:
 - `calculateETA`: Boolean, defaults to false. If true, calculates the ETA of each prediction in milliseconds and includes it in each prediction’s `eta` property.
 
 ---
