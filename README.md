@@ -32,15 +32,20 @@ Below are the methods dedicated to specific request types. Each has its own obje
 
 #### .time(reqObj, callback(err, result))
 ```javascript
-bustime.time(null, function (err, result) {
+var reqObj = {
+  services: {
+    moment: true // optional
+  }
+}
+
+bustime.time(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
 Where `result` is an object with a `tm` property containing the API’s time in YYYYMMDD HH:MM:SS format, and an `error` property containing an array of errors.
 
-To-do:
-- Offer to convert time to Unix timestamp.
-- Offer to return time as a [moment.js](http://momentjs.com/) object.
+Special object properties:
+- `moment`: Boolean, defaults to false. If true, includes the time as a [moment.js](http://momentjs.com/) object in `result.moment`.
 
 #### .vehicles(reqObj, callback(err, result))
 ```javascript
@@ -138,10 +143,11 @@ bustime.predictions(reqObj, function (err, result) {
 Where `result` is an object with a `prd` property containing an array of predictions, and an `error` property containing an array of errors. It may contain both properties, particularly when multiple routes or stops are sent in the query. If only one prediction or error object is returned, it is a direct child of the `prd` or `error` property (i.e. not an array).
 
 Request object properties are:
-
 - `rt`: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'33,34'`)
 - `stpid`: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'897,899'`)
-- `calculateETA`: Is a Boolean (default: false). When true, calculates the ETA of each prediction in milliseconds and includes it in the response.
+
+Special object properties are:
+- `calculateETA`: Boolean, defaults to false. If true, calculates the ETA of each prediction in milliseconds and includes it in each prediction’s `eta` property.
 
 #### .serviceBulletins(reqObj, callback(err, result))
 ```javascript
