@@ -23,6 +23,7 @@
   "homepage": "https://github.com/agarzola/node-bustime",
   "dependencies": {
     "http": "0.0.0",
+    "moment": "^2.8.4",
     "querystring": "^0.2.0",
     "xml2js": "^0.4.4"
   }
