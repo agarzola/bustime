@@ -18,9 +18,9 @@
   "author": "Alfonso Gómez-Arzola <alfonso@mrkp.co> (http://mrkp.co/)",
   "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/agarzola/node-bustime/issues"
+    "url": "https://github.com/agarzola/bustime.js/issues"
   },
-  "homepage": "https://github.com/agarzola/node-bustime",
+  "homepage": "https://github.com/agarzola/bustime.js",
   "dependencies": {
     "http": "0.0.0",
     "moment": "^2.8.4",
