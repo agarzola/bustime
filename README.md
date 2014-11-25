@@ -198,4 +198,4 @@ Options for `requestType` are: `'gettime'`, `'getvehicles'`, `'getroutes'`, `'ge
 ---
 
 ### What about the browser?
-I’ll be working on making this work in the browser as well. No word yet on when. For the time being, [browserify](http://browserify.org/) might do the trick (untested, though).
+I’ll be working on making this work in the browser as well. No idea when, though. For the time being, [browserify](http://browserify.org/) might do the trick (untested). Pull requests are welcome!
