@@ -143,6 +143,23 @@ Request object properties are:
 - `stpid`: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'897,899'`)
 - `calculateETA`: Is a Boolean (default: false). When true, calculates the ETA of each prediction in milliseconds and includes it in the response.
 
+#### .serviceBulletins(reqObj, callback(err, result))
+```javascript
+var reqObj = {
+  rt: route_number,     // required if stpid not specified
+  rtdir: route_dir,     // optional, requires rt property
+  stpid: stop_id,       // required if rt not specified
+  services: {
+    calculateETA: false // optional, defaults to false
+  }
+}
+
+bustime.serviceBulletins(reqObj, function (err, result) {
+    console.log(JSON.stringify(result, null, 2));
+});
+```
+Where `result` is an object with a `sb` property containing an array of bulletins, and an `error` property containing an array of errors. If only one bulletin or error object is returned, it is a direct child of the `sb` or `error` property (i.e. not an array).
+
 ---
 
 ### What about the browser?
