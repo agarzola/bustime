@@ -19,7 +19,7 @@ var gulp = require('gulp'),
  * introduced a feature or made a backwards-incompatible release.
  */
 
-function inc (importance) {
+function inc(importance) {
   // get all the files to bump version in
   return gulp.src(['./package.json'])
     // bump the version number in those files
