@@ -165,7 +165,7 @@ var reqObj = {
   top: max_predictions, // optional, max number of predictions
   tmres: resolution     // optional, defaults to 'm'
   services: {
-    calculateETA: false // optional, defaults to false
+    calculateETA: true  // optional, defaults to false
   }
 }
 
@@ -183,7 +183,7 @@ Request object properties are:
 - `tmres`: time stamp resolution. Set to `'s'` to get time resolution to the second. Set to `'m'` to get time resolution to the minute. Defaults to `'m'`. _(This option is not documented in the BusTime documentation for the `/getpredictions` endpoint, but seems to work anyway.)_
 
 Services available:
-- `calculateETA`: Boolean, defaults to false. If true, calculates the ETA of each prediction in milliseconds and includes it in each prediction’s `eta` property. _(This option works best when `tmres` is set to `'s'`.)_
+- `calculateETA`: Boolean, defaults to false. If true, calculates the estimated time of arrival of each prediction in milliseconds and includes it in that prediction’s `eta` property. _(This option works best when `tmres` is set to `'s'`.)_
 
 ---
 #### .serviceBulletins(reqObj, callback(err, result))
