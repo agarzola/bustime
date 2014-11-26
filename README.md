@@ -1,7 +1,7 @@
-bustime.js
+bustime
 ============
 
-An abstraction of the Clever Devices [BusTime API](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf), used by transit authorities across the U.S. _bustime.js_ takes parameter values as a JavaScript object and returns the API’s response also as an object. You need not worry about generating query parameters or parsing XML responses! Yay!
+An abstraction of the Clever Devices [BusTime API](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf), used by transit authorities across the U.S. `bustime` takes parameter values as a JavaScript object and returns the API’s response also as an object. You need not worry about generating query parameters or parsing XML responses! Yay!
 
 **::::::::::::::: Probably not production ready! :::::::::::::::**
 
@@ -11,10 +11,10 @@ An abstraction of the Clever Devices [BusTime API](http://bustracker.gocarta.org
 ```bash
 $ npm install bustime
 ```
-_(You probably want to save it as a dependency, but I ain’t the boss of you.)_
+_(You probably want to `--save` it as a dependency, but I ain’t the boss of you.)_
 
 ## Usage
-Before you require bustime.js, you should create an object with at least your API key and the host. This object is then passed as an argument of require, like so:
+Before you require `bustime`, you should create an object with at least your API key and the host. This object is then passed as an argument of require, like so:
 ```javascript
 var bustime = require('bustime');
 
@@ -33,12 +33,12 @@ var bustime = require('bustime')(apiObj);
 ## Request methods
 There are two ways to make requests to the API using this library:
 
-1. **Using an endpoint-specific method:** This is the preferred way if you’d like to use the added services that bustime.js offers for each. For example, all endpoint-specific methods validate your request parameter object by default according to the needs of that endpoint, to avoid faulty requests made to the API (this can be turned off by on a per-method basis). Additionally, some of the methods offer special services that you can choose to turn on.
+1. **Using an endpoint-specific method:** This is the preferred way if you’d like to use the added services that `bustime` offers for each. For example, all endpoint-specific methods validate your request parameter object by default according to the needs of that endpoint, to avoid faulty requests made to the API (this can be turned off by on a per-method basis). Additionally, some of the methods offer special services that you can choose to turn on.
 2. **Using the generic `.request()` method:** This method makes a request to the API and converts the XML response into a JavaScript object. It offers nothing more than that. This is the method that each of the dedicated methods described above use to make requests between validating and performing additional services on the resulting data.
 
 ---
 ### 1. Endpoint-specific methods
-Below are the methods dedicated to specific endpoints on the BusTime API. Each has its own request object requirements. This object (sans special properties pertaining to bustime.js’ services) is translated directly to the querystring in the request to the API. See the [BusTime Developer API Guide](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf) for more information on each parameter.
+Below are the methods dedicated to specific endpoints on the BusTime API. Each has its own request object requirements. This object (sans the `services` property pertaining to `bustime`’s services) is translated directly to the querystring in the request to the API. See the [BusTime Developer API Guide](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf) for more information on each parameter.
 
 **A note on validation:** Each endpoint-specific method below validates your `reqObj` object by default. When your object fails validation, an error is returned to your callback and the request to the BusTime API is aborted. To turn off validation (not that you’d ever want to), include a `validate` property set to `false` within the `services` property of your request object, like so:
 ```javascript
@@ -118,7 +118,7 @@ Request object properties are:
 - `rt`: route number(s). Can be an Integer or String. May only be one route number.
 
 ---
-#### .stops()
+#### .stops(reqObj, callback(err, result))
 ```javascript
 var reqObj = {
   rt: route_number, // required
@@ -137,14 +137,14 @@ Request object properties are:
 - `dir`: direction(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'0,1'`)
 
 ---
-#### .patterns()
+#### .patterns(reqObj, callback(err, result))
 ```javascript
 var reqObj = {
   rt: route_number, // optional, not available w/pid
   pid: direction    // optional, not available w/rt
 }
 
-bustime.stops(reqObj, function (err, result) {
+bustime.patterns(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
