@@ -1,5 +1,5 @@
 {
-  "name": "bustime.js",
+  "name": "bustime",
   "version": "0.4.1",
   "description": "An abstraction of the Clever Devices BusTime developer API",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/agarzola/bustime.js.git"
+    "url": "git://github.com/agarzola/bustime.git"
   },
   "keywords": [
     "bustime",
@@ -18,9 +18,9 @@
   "author": "Alfonso Gómez-Arzola <alfonso@mrkp.co> (http://mrkp.co/)",
   "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/agarzola/bustime.js/issues"
+    "url": "https://github.com/agarzola/bustime/issues"
   },
-  "homepage": "https://github.com/agarzola/bustime.js",
+  "homepage": "https://github.com/agarzola/bustime",
   "dependencies": {
     "http": "0.0.0",
     "joi": "^4.9.0",
