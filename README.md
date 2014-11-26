@@ -80,7 +80,7 @@ var reqObj = {
   tmres: resolution // optional, defaults to 'm'
 }
 
-bustime.predictions(reqObj, function (err, result) {
+bustime.vehicles(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
@@ -159,8 +159,11 @@ Request object properties are:
 #### .predictions(reqObj, callback(err, result))
 ```javascript
 var reqObj = {
-  rt: route_number,     // required
-  stpid: stop_id,       // required
+  stpid: stop_id,       // optional, not available w/vid
+  rt: route_number,     // optional, requires stpid
+  vid: vehicle_id,      // optional, not available w/stpid
+  top: max_predictions, // optional, max number of predictions
+  tmres: resolution     // optional, defaults to 'm'
   services: {
     calculateETA: false // optional, defaults to false
   }
@@ -173,11 +176,14 @@ bustime.predictions(reqObj, function (err, result) {
 Where `result` is an object with a `prd` property containing an array of predictions, and an `error` property containing an array of errors. It may contain both properties, particularly when multiple routes or stops are sent in the query. If only one prediction or error object is returned, it is a direct child of the `prd` or `error` property (i.e. not an array).
 
 Request object properties are:
+- `stpid`: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited stop numbers as a string (e.g. `'897,899'`)
 - `rt`: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'33,34'`)
-- `stpid`: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'897,899'`)
+- `vid`: vehicle ID(s). Can be an Integer or String. May include multiple, comma-delimited vehicle numbers as a string (e.g. `'452,191'`)
+- `top`: max number of predictions. Must be an Integer
+- `tmres`: time stamp resolution. Set to `'s'` to get time resolution to the second. Set to `'m'` to get time resolution to the minute. Defaults to `'m'`. _(This option is not documented in the BusTime documentation for the `/getpredictions` endpoint, but seems to work anyway.)_
 
 Services available:
-- `calculateETA`: Boolean, defaults to false. If true, calculates the ETA of each prediction in milliseconds and includes it in each prediction’s `eta` property.
+- `calculateETA`: Boolean, defaults to false. If true, calculates the ETA of each prediction in milliseconds and includes it in each prediction’s `eta` property. _(This option works best when `tmres` is set to `'s'`.)_
 
 ---
 #### .serviceBulletins(reqObj, callback(err, result))
