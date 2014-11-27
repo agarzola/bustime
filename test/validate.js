@@ -1,5 +1,4 @@
-var assert   = require('assert'),
-    should   = require('should'),
+var should   = require('should'),
     Joi      = require('joi'),
     validate = require('../lib/modules/validate'),
     methods  = [ 'time', 'vehicles', 'routes', 'directions',
