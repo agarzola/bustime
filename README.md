@@ -68,10 +68,37 @@ bustime.time(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `tm` property containing the API’s time in YYYYMMDD HH:MM:SS format, and an `error` property containing an array of errors.
 
 Services available:
 - `moment`: Boolean, defaults to false. If true, includes the time as a [moment.js](http://momentjs.com/) object in `result.moment`.
+
+`result` is an object with a `tm` property containing the API’s time in YYYYMMDD HH:MM:SS format, and an `error` property containing an array of errors. Like so:
+
+```javascript
+{ tm: '20141127 10:07:30',
+  moment:
+   { _isAMomentObject: true,
+     _i: '20141127 10:07:30',
+     _f: 'YYYYMMDD HH:mm:ss',
+     _isUTC: false,
+     _pf:
+      { empty: false,
+        unusedTokens: [],
+        unusedInput: [],
+        overflow: -1,
+        charsLeftOver: 0,
+        nullInput: false,
+        invalidMonth: null,
+        invalidFormat: false,
+        userInvalidated: false,
+        iso: false },
+     _locale:
+      { _ordinalParse: /\d{1,2}(th|st|nd|rd)/,
+        ordinal: [Function],
+        _abbr: 'en',
+        _ordinalParseLenient: /\d{1,2}(th|st|nd|rd)|\d{1,2}/ },
+     _d: Thu Nov 27 2014 10:07:30 GMT-0500 (EST) } }
+```
 
 ---
 #### .vehicles(reqObj, callback(err, result))
