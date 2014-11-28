@@ -1,5 +1,4 @@
-var assert   = require('assert'),
-    should   = require('should'),
+var should   = require('should'),
     Joi      = require('joi'),
     utility  = require('../lib/modules/utility')
     ;
