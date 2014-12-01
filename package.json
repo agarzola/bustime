@@ -34,6 +34,7 @@
     "gulp-filter": "^1.0.2",
     "gulp-git": "^0.5.4",
     "gulp-tag-version": "^1.1.0",
-    "should": "^4.3.0"
+    "should": "^4.3.0",
+    "sinon": "^1.12.1"
   }
 }
