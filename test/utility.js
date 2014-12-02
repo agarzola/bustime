@@ -1,14 +1,13 @@
 var should   = require('should'),
     Joi      = require('joi'),
     sinon    = require('sinon'),
-    requests = require('../lib/modules/requests')(null),
-    utility  = require('../lib/modules/utility')(null)
+    proxyquire = require('proxyquire')
     ;
 
 describe('Utility', function () {
   var fakeData = {
     route: [
-      { rt: '1', rtnm: '1 ALTON PARK', rtclr: '#cc3399' },
+      { rt: '7', rtnm: '1 ALTON PARK', rtclr: '#cc3399' },
       { rt: '2', rtnm: '2 NORTH CHATTANOOGA', rtclr: '#ff6699' },
       { rt: '4', rtnm: '4 EASTGATE/HAMILTON PL', rtclr: '#cc0033' }
     ],
@@ -29,31 +28,42 @@ describe('Utility', function () {
     ]
   }
 
-  before(function () {
-    sinon.stub(requests, 'specialMethod').callsArgWithAsync(2, null, fakeData);
-    // this is not working; waiting on answer:
-    // http://stackoverflow.com/questions/27197613/how-do-i-sinon-stub-a-nested-method-with-a-callback
-  });
+  var utilityObj = proxyquire('../lib/modules/utility', {
+                  './requests': function () {
+                    return {
+                      specialMethod: function (a, b, c) {
+                        c(null, fakeData);
+                      }
+                    }
+                  },
+                  '@runtimeGlobal': true
+                });
+
+  var utility = utilityObj(null);
+
+  // var utility = require('../lib/modules/utility')({key:'',host:'bustracker.gocarta.org'});
+  // var fs = require('fs');
 
   it('should produce a collection of routes with embedded directions and stops', function (done) {
-    // This test can take a bit of time when calling the server:
-    this.timeout(4000);
+    this.timeout(10000);
     utility.collectRoutesAndStops(function (err, result) {
-      if (err) return done(err);
-      var schema = Joi.array().includes(Joi.object().keys({
-        rt: Joi.string().required(),
-        rtnm: Joi.string().required(),
-        rtclr: Joi.string().required(),
-        dir: Joi.array().includes(Joi.object().keys({
-          id: Joi.string(),
-          stops: Joi.array().includes(Joi.object()).required()
-        })).required()
-      }));
-      Joi.validate(result.route, schema, function (err, validated) {
-        done(err);
-      });
+      if (err) {
+        return done(err);
+      } else {
+        var schema = Joi.array().includes(Joi.object().keys({
+          rt: Joi.string().required(),
+          rtnm: Joi.string().required(),
+          rtclr: Joi.string().required(),
+          dir: Joi.array().includes(Joi.object().keys({
+            id: Joi.string(),
+            stops: Joi.array().includes(Joi.object()).required()
+          })).required()
+        }));
+        Joi.validate(result, schema, function (err, validated) {
+          // fs.writeFileSync('./testresult.json', JSON.stringify(validated, null, 2));
+          done(err);
+        });
+      }
     });
   });
-
-  after(function () { requests.specialMethod.restore(); });
 });
