@@ -1,6 +1,5 @@
 var should   = require('should'),
     Joi      = require('joi'),
-    sinon    = require('sinon'),
     proxyquire = require('proxyquire')
     ;
 
