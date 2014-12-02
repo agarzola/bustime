@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/agarzola/bustime",
   "dependencies": {
+    "async": "^0.9.0",
     "http": "0.0.0",
     "joi": "^4.9.0",
     "moment": "^2.8.4",
