@@ -41,9 +41,6 @@ describe('Utility', function () {
 
   var utility = utilityObj(null);
 
-  // var utility = require('../lib/modules/utility')({key:'',host:'bustracker.gocarta.org'});
-  // var fs = require('fs');
-
   it('should produce a collection of routes with embedded directions and stops', function (done) {
     this.timeout(10000);
     utility.collectRoutesAndStops(function (err, result) {
@@ -60,7 +57,6 @@ describe('Utility', function () {
           })).required()
         }));
         Joi.validate(result, schema, function (err, validated) {
-          // fs.writeFileSync('./testresult.json', JSON.stringify(validated, null, 2));
           done(err);
         });
       }
