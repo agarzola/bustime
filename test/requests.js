@@ -115,7 +115,6 @@ describe('Requests', function () {
                     });
         var requests = requestsObj(null);
         sinon.stub(requests, 'genericMethod', function (a, b, c) {
-          genericCalled = true;
           c(null, true);
         });
         requests.specialMethod('bogusMethod', null, function (err, result) {
@@ -124,5 +123,41 @@ describe('Requests', function () {
         });
       });
     });
+  });
+
+  describe('genericMethod()', function () {
+    var fakeAPIobj = {
+      host: 'bogus.host.yay'
+    }
+    var requests = require('../lib/modules/requests')(fakeAPIobj),
+        fakeAPIresponse = '<bustime-response>'
+                        + '<error>'
+                        + '<rt>5</rt>'
+                        + '<dir>\'ROUND TRIP\'</dir>'
+                        + '<msg>No data found for parameters</msg>'
+                        + '</error>'
+                        + '</bustime-response>'
+        ;
+
+    it('should return a valid object', function (done) {
+      sinon.stub(requests, 'queryAPI', function (b, c) {
+        c(null, fakeAPIresponse);
+      });
+      requests.genericMethod('bogus', null, function (err, result) {
+        result.should.be.an.instanceOf(Object);
+        done();
+      });
+      requests.queryAPI.restore();
+    });
+
+    it('should return an error from the server', function (done) {
+      sinon.stub(requests, 'queryAPI', function (b, c) {
+        c('not null', null);
+      });
+      requests.genericMethod('bogus', null, function (err, result) {
+        err.should.not.equal(null);
+        done();
+      });
+    })
   });
 });
