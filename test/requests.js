@@ -3,9 +3,9 @@ var should     = require('should'),
     sinon      = require('sinon')
     ;
 
-describe('Results', function () {
+describe('Requests', function () {
   it('should return an object', function (done) {
-    var requests = require('../lib/modules/requests')(null)
+    var requests = require('../lib/modules/requests')(null);
     requests.should.be.an.instanceOf(Object);
     done();
   });
