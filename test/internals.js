@@ -1,6 +1,6 @@
 var should    = require('should'),
     Joi       = require('joi'),
-    internals = require('../lib/modules/internals')
+    internals = require('../lib/internals')
     ;
 
 describe('Internals:', function () {

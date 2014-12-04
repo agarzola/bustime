@@ -5,7 +5,7 @@ var should     = require('should'),
 
 describe('Requests', function () {
   it('should return an object', function (done) {
-    var requests = require('../lib/modules/requests')(null);
+    var requests = require('../lib/requests')(null);
     requests.should.be.an.instanceOf(Object);
     done();
   });
@@ -15,7 +15,7 @@ describe('Requests', function () {
       var validateCalled = false,
           servicesCalled = false,
           genericCalled = false,
-          requestsObj = proxyquire('../lib/modules/requests', {
+          requestsObj = proxyquire('../lib/requests', {
                     './validate': {
                       bogusMethod: function (b, c) {
                         validateCalled = true;
@@ -60,7 +60,7 @@ describe('Requests', function () {
 
     describe('returning errors', function () {
       it('should return a validation error', function (done) {
-        var requestsObj = proxyquire('../lib/modules/requests', {
+        var requestsObj = proxyquire('../lib/requests', {
                       './validate': {
                         bogusMethod: function (b, c) {
                           validateCalled = true;
@@ -77,7 +77,7 @@ describe('Requests', function () {
       });
 
       it('should return an http request error', function (done) {
-        var requestsObj = proxyquire('../lib/modules/requests', {
+        var requestsObj = proxyquire('../lib/requests', {
                       './validate': {
                         bogusMethod: function (b, c) {
                           validateCalled = true;
@@ -98,7 +98,7 @@ describe('Requests', function () {
       });
 
       it('should return a servicing error', function (done) {
-        var requestsObj = proxyquire('../lib/modules/requests', {
+        var requestsObj = proxyquire('../lib/requests', {
                       './validate': {
                         bogusMethod: function (b, c) {
                           validateCalled = true;
@@ -129,7 +129,7 @@ describe('Requests', function () {
     var fakeAPIobj = {
       host: 'bogus.host.yay'
     }
-    var requests = require('../lib/modules/requests')(fakeAPIobj),
+    var requests = require('../lib/requests')(fakeAPIobj),
         fakeAPIresponse = '<bustime-response>'
                         + '<error>'
                         + '<rt>5</rt>'
