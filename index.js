@@ -1,2 +1,6 @@
 'use strict';
-module.exports = require('./lib/bustime.js');
+bustime = function (apiObj) {
+  require('./lib/bustime.js')(apiObj);
+}
+
+module.exports = bustime;
