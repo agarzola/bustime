@@ -1,5 +1,5 @@
 'use strict';
-bustime = function (apiObj) {
+var bustime = function (apiObj) {
   require('./lib/bustime.js')(apiObj);
 }
 
