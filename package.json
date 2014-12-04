@@ -1,6 +1,6 @@
 {
   "name": "bustime",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "An abstraction of the Clever Devices BusTime developer API",
   "main": "index.js",
   "scripts": {
