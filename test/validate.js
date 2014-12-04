@@ -1,6 +1,6 @@
 var should   = require('should'),
     Joi      = require('joi'),
-    validate = require('../lib/modules/validate'),
+    validate = require('../lib/validate'),
     methods  = [ 'time', 'vehicles', 'routes', 'directions',
                 'stops', 'patterns', 'predictions', 'serviceBulletins' ],
     schema   = Joi.object().keys({ notBogusProperty: Joi.any() }),

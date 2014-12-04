@@ -1,5 +1,5 @@
 var should = require('should'),
-    services = require('../lib/modules/services'),
+    services = require('../lib/services'),
     result, reqObj
     ;
 

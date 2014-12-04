@@ -27,7 +27,7 @@ describe('Utility', function () {
     ]
   }
 
-  var utilityObj = proxyquire('../lib/modules/utility', {
+  var utilityObj = proxyquire('../lib/utility', {
                   './requests': function () {
                     return {
                       specialMethod: function (a, b, c) {
