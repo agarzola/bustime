@@ -21,6 +21,19 @@ describe('Services:', function () {
     }
   });
 
+  it('should return the callback when no services are requested', function (done) {
+    var count = 0;
+    for (key in services) {
+      if (services.hasOwnProperty(key)) {
+        services[key](null, mockResult, function (err, processed) {
+          count++;
+        });
+      }
+    }
+    count.should.equal(Object.keys(services).length);
+    done();
+  });
+
   describe('calculateETA:', function () {
     it('should produce an `eta` property', function (done) {
       services.predictions(reqObj, mockResult, function (err, processed) {
