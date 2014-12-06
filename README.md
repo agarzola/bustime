@@ -256,13 +256,17 @@ The object format is as follows:
         ]
       }
     ]
+  },
+  {
+    rt: '2',
+    ...
   }
 ]
 ```
 
 The direction `id` whatever is returned by your BusTracker API. It can be a number, but also something like `'Inbound'`. This depends on how your BusTracker API is set up to identify route directions.
 
-**Please note:** This operation can take a while (up to a few seconds, depending on your API server’s load), so it’s recommended that you run this once while booting up your app or as part of a data collection script (from which you can commit it to a text file for later consumption.
+**Please note:** This operation can take a while (up to a few seconds, depending on your API server’s load), so it’s recommended that you run this once while booting up your app or as part of a data collection script (from which you can commit it to a text file for later consumption). Otherwise, you risk performance issues in your application.
 
 ---
 
