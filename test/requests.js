@@ -139,7 +139,7 @@ describe('Requests', function () {
                         + '</bustime-response>'
         ;
 
-    it('should return a valid object', function (done) {
+    it('should return an object', function (done) {
       sinon.stub(requests, 'queryAPI', function (b, c) {
         c(null, fakeAPIresponse);
       });
@@ -158,6 +158,6 @@ describe('Requests', function () {
         err.should.not.equal(null);
         done();
       });
-    })
+    });
   });
 });
