@@ -3,12 +3,14 @@ bustime [![Code Climate](https://codeclimate.com/github/agarzola/bustime/badges/
 
 An abstraction of the Clever Devices [BusTime API](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf), used by transit authorities across the U.S. `bustime` takes parameter values as a JavaScript object and returns the API’s response also as an object. You need not worry about generating query parameters or parsing XML responses! Yay!
 
-**::::::::::::::: Probably not production ready! :::::::::::::::**
+Now with [utility methods](#utility-methods)!
+
+**::::::::::::::: Probably not production ready! (But it’s close!) :::::::::::::::**
 
 ---
 
 ## Install
-```bash
+```cli
 $ npm install bustime
 ```
 _(You probably want to `--save` it as a dependency, but I ain’t the boss of you.)_
@@ -220,6 +222,47 @@ bustime.request(requestType, reqObj, function (err, result) {
 Where `result` is an object like the one you would get from any of the endpoint-specific methods described above.
 
 Options for `requestType` are: `'gettime'`, `'getvehicles'`, `'getroutes'`, `'getdirections'`, `'getstops'`, `'getpatterns'`, `'getpredictions'`, `'getservicebulletins'`.
+
+---
+
+## Utility methods
+`bustime` now offers a useful method for collecting data from the BusTracker API to store in memory or commit to a file for later use in your app. There is only one such method at the moment, but more may be added in the future. Create an issue if there’s a specific utility you’d like to see implemented.
+
+### 1. .collectRoutesAndStops(callback)
+This method builds a comprehensive object which includes all available routes, their directions, and every stop served by each direction in each route. This can be useful if our application needs to check whether a specific stop (or group thereof) is served by a route, or rule out a stop depending on which direction a bus is going. All information associated with routes and stops is left intact to make the object as useful as possible.
+
+The object format is as follows:
+
+```javascript
+[
+  { rt: '1',
+    rtnm: '1 ALTON PARK',
+    rtclr: '#cc3399',
+    dir: [
+      { id: '0',
+        stops: [
+          { stpid: '1581',
+            stpnm: '33RD + CHATTEM',
+            lat: '35.017467535463',
+            lon: '-85.321669578552'
+          },
+          { ... }
+        ]
+      },
+      { id: '1',
+        stops: [
+          { ... },
+          { ... }
+        ]
+      }
+    ]
+  }
+]
+```
+
+The direction `id` whatever is returned by your BusTracker API. It can be a number, but also something like `'Inbound'`. This depends on how your BusTracker API is set up to identify route directions.
+
+**Please note:** This operation can take a while (up to a few seconds, depending on your API server’s load), so it’s recommended that you run this once while booting up your app or as part of a data collection script (from which you can commit it to a text file for later consumption.
 
 ---
 
