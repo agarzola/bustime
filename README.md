@@ -228,7 +228,7 @@ Options for `requestType` are: `'gettime'`, `'getvehicles'`, `'getroutes'`, `'ge
 ## Utility methods
 `bustime` now offers a useful method for collecting data from the BusTracker API to store in memory or commit to a file for later use in your app. There is only one such method at the moment, but more may be added in the future. Create an issue if there’s a specific utility you’d like to see implemented.
 
-### 1. .collectRoutesAndStops(callback)
+### .collectRoutesAndStops(callback)
 This method builds a comprehensive object which includes all available routes, their directions, and every stop served by each direction in each route. This can be useful if our application needs to check whether a specific stop (or group thereof) is served by a route, or rule out a stop depending on which direction a bus is going. All information associated with routes and stops is left intact to make the object as useful as possible.
 
 The object format is as follows:
