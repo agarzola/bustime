@@ -2,7 +2,7 @@
 This file has been generated using Gitdown (https://github.com/gajus/gitdown).
 Direct edits to this will be be overwritten. Look for Gitdown markup file under ./.gitdown/ path.
 -->
-bustime [![NPM version](http://img.shields.io/npm/v/bustime.svg?style=flat)](https://www.npmjs.org/package/bustime) [![Code Climate](https://codeclimate.com/github/agarzola/bustime/badges/gpa.svg)](https://codeclimate.com/github/agarzola/bustime) [![Code Climate](https://codeclimate.com/github/agarzola/bustime/badges/coverage.svg)](https://codeclimate.com/github/agarzola/bustime) [![Travis build status](http://img.shields.io/travis/agarzola/bustime/improve-documentation.svg?style=flat)](https://travis-ci.org/agarzola/bustime)
+bustime [![NPM version](http://img.shields.io/npm/v/bustime.svg?style=flat)](https://www.npmjs.org/package/bustime) [![Code Climate](https://codeclimate.com/github/agarzola/bustime/badges/gpa.svg)](https://codeclimate.com/github/agarzola/bustime) [![Code Climate](https://codeclimate.com/github/agarzola/bustime/badges/coverage.svg)](https://codeclimate.com/github/agarzola/bustime) [![Travis build status](http://img.shields.io/travis/agarzola/bustime/master.svg?style=flat)](https://travis-ci.org/agarzola/bustime)
 ============
 
 An abstraction of the Clever Devices [BusTime API](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf), used by transit authorities across the U.S. `bustime` takes parameter values as a JavaScript object and returns the API’s response also as an object. You need not worry about generating query parameters or parsing XML responses! Yay!
