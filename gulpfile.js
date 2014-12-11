@@ -52,5 +52,5 @@ gulp.task('gitdown', function () {
 });
 
 gulp.task('gitdown-watch', function () {
-  gulp.watch(['./.gitdown/*'], ['gitdown']);
+  gulp.watch(['./.gitdown/**/*'], ['gitdown']);
 });
