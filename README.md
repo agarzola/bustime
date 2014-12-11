@@ -1,21 +1,49 @@
-bustime [![Code Climate](https://codeclimate.com/github/agarzola/bustime/badges/gpa.svg)](https://codeclimate.com/github/agarzola/bustime) [![Test Coverage](https://codeclimate.com/github/agarzola/bustime/badges/coverage.svg)](https://codeclimate.com/github/agarzola/bustime) [![Build Status](https://travis-ci.org/agarzola/bustime.svg?branch=master)](https://travis-ci.org/agarzola/bustime)
+<!--
+This file has been generated using Gitdown (https://github.com/gajus/gitdown).
+Direct edits to this will be be overwritten. Look for Gitdown markup file under ./.gitdown/ path.
+-->
+bustime [![NPM version](http://img.shields.io/npm/v/bustime.svg?style=flat)](https://www.npmjs.org/package/bustime) [![Code Climate](https://codeclimate.com/github/agarzola/bustime/badges/gpa.svg)](https://codeclimate.com/github/agarzola/bustime) [![Code Climate](https://codeclimate.com/github/agarzola/bustime/badges/coverage.svg)](https://codeclimate.com/github/agarzola/bustime) [![Travis build status](http://img.shields.io/travis/agarzola/bustime/improve-documentation.svg?style=flat)](https://travis-ci.org/agarzola/bustime)
 ============
 
 An abstraction of the Clever Devices [BusTime API](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf), used by transit authorities across the U.S. `bustime` takes parameter values as a JavaScript object and returns the API’s response also as an object. You need not worry about generating query parameters or parsing XML responses! Yay!
 
-Now with [utility methods](#utility-methods)!
+Now with [utility methods](#utility-methods) to help you mine data from your API!
 
 **::::::::::::::: Probably not production ready! (But it’s close!) :::::::::::::::**
 
+
+Contents
+============
+
+* [Installation](#installation)
+* [Usage](#usage)
+* [Request methods](#request-methods)
+    * [1. Endpoint-specific methods](#request-methods-1-endpoint-specific-methods)
+        * [.time(reqObj, callback(err, result))](#request-methods-1-endpoint-specific-methods--time-reqobj-callback-err-result-)
+        * [.vehicles(reqObj, callback(err, result))](#request-methods-1-endpoint-specific-methods--vehicles-reqobj-callback-err-result-)
+        * [.routes(reqObj, callback(err, result))](#request-methods-1-endpoint-specific-methods--routes-reqobj-callback-err-result-)
+        * [.directions(reqObj, callback(err, result))](#request-methods-1-endpoint-specific-methods--directions-reqobj-callback-err-result-)
+        * [.stops(reqObj, callback(err, result))](#request-methods-1-endpoint-specific-methods--stops-reqobj-callback-err-result-)
+        * [.patterns(reqObj, callback(err, result))](#request-methods-1-endpoint-specific-methods--patterns-reqobj-callback-err-result-)
+        * [.predictions(reqObj, callback(err, result))](#request-methods-1-endpoint-specific-methods--predictions-reqobj-callback-err-result-)
+        * [.serviceBulletins(reqObj, callback(err, result))](#request-methods-1-endpoint-specific-methods--servicebulletins-reqobj-callback-err-result-)
+    * [2. Generic request method](#request-methods-2-generic-request-method)
+        * [.request(requestType, reqObj, callback(err, result))](#request-methods-2-generic-request-method--request-requesttype-reqobj-callback-err-result-)
+* [Utility methods](#utility-methods)
+    * [.collectRoutesAndStops(callback)](#utility-methods--collectroutesandstops-callback-)
+* [What about the browser?](#what-about-the-browser-)
+
+
 ---
 
-## Install
-```cli
+<h2 id="installation">Installation</h2>
+```bash
 $ npm install bustime
 ```
 _(You probably want to `--save` it as a dependency, but I ain’t the boss of you.)_
 
-## Usage
+
+<h2 id="usage">Usage</h2>
 Before you require `bustime`, you should create an object with at least your API key and the host. This object is then passed as an argument of require, like so:
 ```javascript
 var bustime = require('bustime');
@@ -32,14 +60,17 @@ var apiObj = {
 var bustime = require('bustime')(apiObj);
 ```
 
-## Request methods
+
+<h2 id="request-methods">Request methods</h2>
 There are two ways to make requests to the API using this library:
 
 1. **Using an endpoint-specific method:** This is the preferred way if you’d like to use the added services that `bustime` offers for each. For example, all endpoint-specific methods validate your request parameter object by default according to the needs of that endpoint, to avoid faulty requests made to the API (this can be turned off by on a per-method basis). Additionally, some of the methods offer special services that you can choose to turn on.
 2. **Using the generic `.request()` method:** This method makes a request to the API and converts the XML response into a JavaScript object. It offers nothing more than that. This is the method that each of the dedicated methods described above use to make requests between validating and performing additional services on the resulting data.
 
+
 ---
-### 1. Endpoint-specific methods
+
+<h3 id="request-methods-1-endpoint-specific-methods">1. Endpoint-specific methods</h3>
 Below are the methods dedicated to specific endpoints on the BusTime API. Each has its own request object requirements. This object (sans the `services` property pertaining to `bustime`’s services) is translated directly to the querystring in the request to the API. See the [BusTime Developer API Guide](http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf) for more information on each parameter.
 
 **A note on validation:** Each endpoint-specific method below validates your `reqObj` object by default. When your object fails validation, an error is returned to your callback and the request to the BusTime API is aborted. To turn off validation (not that you’d ever want to), include a `validate` property set to `false` within the `services` property of your request object, like so:
@@ -56,7 +87,7 @@ I’ve omitted the `validate` property from the descriptions below for the sake 
 
 ---
 
-#### .time(reqObj, callback(err, result))
+<h4 id="request-methods-1-endpoint-specific-methods--time-reqobj-callback-err-result-">.time(reqObj, callback(err, result))</h4>
 ```javascript
 var reqObj = {
   services: {
@@ -101,7 +132,7 @@ Services available:
 ```
 
 ---
-#### .vehicles(reqObj, callback(err, result))
+<h4 id="request-methods-1-endpoint-specific-methods--vehicles-reqobj-callback-err-result-">.vehicles(reqObj, callback(err, result))</h4>
 ```javascript
 var reqObj = {
   rt: route_number, // optional, not available w/vid
@@ -121,7 +152,7 @@ Request object properties are:
 - `tmres`: time stamp resolution. Set to `'s'` to get time resolution to the second. Set to `'m'` to get time resolution to the minute. Defaults to `'m'`.
 
 ---
-#### .routes(reqObj, callback(err, result))
+<h4 id="request-methods-1-endpoint-specific-methods--routes-reqobj-callback-err-result-">.routes(reqObj, callback(err, result))</h4>
 ```javascript
 bustime.routes(null, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
@@ -130,7 +161,7 @@ bustime.routes(null, function (err, result) {
 Where `result` is an object with a `route` property containing an array of route objects, and an `error` property containing an array of errors. If only one route object is returned, it is a direct child of the `route` property (i.e. not an array).
 
 ---
-#### .directions(reqObj, callback(err, result))
+<h4 id="request-methods-1-endpoint-specific-methods--directions-reqobj-callback-err-result-">.directions(reqObj, callback(err, result))</h4>
 ```javascript
 var reqObj = {
   rt: route_number // required
@@ -147,7 +178,7 @@ Request object properties are:
 - `rt`: route number(s). Can be an Integer or String. May only be one route number.
 
 ---
-#### .stops(reqObj, callback(err, result))
+<h4 id="request-methods-1-endpoint-specific-methods--stops-reqobj-callback-err-result-">.stops(reqObj, callback(err, result))</h4>
 ```javascript
 var reqObj = {
   rt: route_number, // required
@@ -166,7 +197,7 @@ Request object properties are:
 - `dir`: direction(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'0,1'`)
 
 ---
-#### .patterns(reqObj, callback(err, result))
+<h4 id="request-methods-1-endpoint-specific-methods--patterns-reqobj-callback-err-result-">.patterns(reqObj, callback(err, result))</h4>
 ```javascript
 var reqObj = {
   rt: route_number, // optional, not available w/pid
@@ -185,7 +216,7 @@ Request object properties are:
 - `pid`: pattern ID(s). Can be an Integer or String. May include multiple, comma-delimited pattern ID numbers as a string (e.g. `'897,899'`)
 
 ---
-#### .predictions(reqObj, callback(err, result))
+<h4 id="request-methods-1-endpoint-specific-methods--predictions-reqobj-callback-err-result-">.predictions(reqObj, callback(err, result))</h4>
 ```javascript
 var reqObj = {
   stpid: stop_id,       // optional, not available w/vid
@@ -215,7 +246,7 @@ Services available:
 - `calculateETA`: Boolean, defaults to false. If true, calculates the estimated time of arrival of each prediction in milliseconds and includes it in that prediction’s `eta` property. _(This option works best when `tmres` is set to `'s'`.)_
 
 ---
-#### .serviceBulletins(reqObj, callback(err, result))
+<h4 id="request-methods-1-endpoint-specific-methods--servicebulletins-reqobj-callback-err-result-">.serviceBulletins(reqObj, callback(err, result))</h4>
 ```javascript
 var reqObj = {
   rt: route_number,     // required if stpid not specified
@@ -229,13 +260,15 @@ bustime.serviceBulletins(reqObj, function (err, result) {
 ```
 Where `result` is an object with a `sb` property containing an array of bulletins, and an `error` property containing an array of errors. If only one bulletin or error object is returned, it is a direct child of the `sb` or `error` property (i.e. not an array).
 
+
 ---
-### 2. Generic request method
+
+<h3 id="request-methods-2-generic-request-method">2. Generic request method</h3>
 The generic request method offers a barebones API request and no special services. It is up to you to set the request type as a string in the first argument. Like the endpoint-specific methods, it responds with a JavaScript object.
 
 The generic `.request()` method might come in handy if you write your own BusTime-related methods and want to make them available for more than one API request type (as opposed to limiting your method to, for example, only _predictions_ or only _stops_, for example). It could also be useful if a future version of BusTime adds endpoints that this library doesn’t yet cover.
 
-#### .request(requestType, reqObj, callback(err, result))
+<h4 id="request-methods-2-generic-request-method--request-requesttype-reqobj-callback-err-result-">.request(requestType, reqObj, callback(err, result))</h4>
 ```javascript
 var reqObj = {}; // The contents of this object will depend on the type ↵
                  // of request you’ll be making to the BusTime API.
@@ -250,12 +283,14 @@ Where `result` is an object like the one you would get from any of the endpoint-
 
 Options for `requestType` are: `'gettime'`, `'getvehicles'`, `'getroutes'`, `'getdirections'`, `'getstops'`, `'getpatterns'`, `'getpredictions'`, `'getservicebulletins'`.
 
+
 ---
 
-## Utility methods
+<h2 id="utility-methods">Utility methods</h2>
 `bustime` now offers a useful method for collecting data from the BusTracker API to store in memory or commit to a file for later use in your app. There is only one such method at the moment, but more may be added in the future. Create an issue if there’s a specific utility you’d like to see implemented.
 
-### .collectRoutesAndStops(callback)
+
+<h3 id="utility-methods--collectroutesandstops-callback-">.collectRoutesAndStops(callback)</h3>
 This method builds a comprehensive object which includes all available routes, their directions, and every stop served by each direction in each route. This can be useful if our application needs to check whether a specific stop (or group thereof) is served by a route, or rule out a stop depending on which direction a bus is going. All information associated with routes and stops is left intact to make the object as useful as possible.
 
 The object format is as follows:
@@ -295,7 +330,8 @@ The direction `id` whatever is returned by your BusTracker API. It can be a numb
 
 **Please note:** This operation can take a while (up to a few seconds, depending on your API server’s load), so it’s recommended that you run this once while booting up your app or as part of a data collection script (from which you can commit it to a text file for later consumption). Otherwise, you risk performance issues in your application.
 
+
 ---
 
-### What about the browser?
+<h2 id="what-about-the-browser-">What about the browser?</h2>
 I’ll be working on making this work in the browser as well. No idea when, though. For the time being, [browserify](http://browserify.org/) might do the trick (untested). Pull requests are welcome!
