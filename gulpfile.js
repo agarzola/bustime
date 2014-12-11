@@ -37,3 +37,20 @@ function inc(importance) {
 gulp.task('patch', function () { return inc('patch'); })
 gulp.task('feature', function () { return inc('minor'); })
 gulp.task('release', function () { return inc('major'); })
+
+/**
+ * Gitdown tasks & configuration.
+ */
+
+var Gitdown = require('gitdown')
+    ;
+
+gulp.task('gitdown', function () {
+  return Gitdown
+    .read('.gitdown/README.md')
+    .write('README.md');
+});
+
+gulp.task('gitdown-watch', function () {
+  gulp.watch(['./.gitdown/*'], ['gitdown']);
+});

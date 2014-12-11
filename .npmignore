@@ -2,3 +2,4 @@ gulpfile.js
 test
 coverage
 .jshintrc
+.gitdown

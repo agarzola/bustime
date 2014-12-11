@@ -30,6 +30,7 @@
     "xml2js": "^0.4.4"
   },
   "devDependencies": {
+    "gitdown": "^1.2.6",
     "gulp": "^3.8.10",
     "gulp-bump": "^0.1.11",
     "gulp-filter": "^1.0.2",
