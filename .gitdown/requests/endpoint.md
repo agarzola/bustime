@@ -72,7 +72,7 @@ bustime.vehicles(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `vehicle` property containing an array of vehicle objects, and an `error` property containing an array of errors. If only one vehicle object is returned, it is a direct child of the `vehicle` property (i.e. not an array).
+Where `result` is an object with a `vehicle` property containing an array of vehicle objects, and an `error` property containing an array of errors.
 
 Request object properties are:
 - `rt`: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'4,9'`)
@@ -86,7 +86,7 @@ bustime.routes(null, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `route` property containing an array of route objects, and an `error` property containing an array of errors. If only one route object is returned, it is a direct child of the `route` property (i.e. not an array).
+Where `result` is an object with a `route` property containing an array of route objects, and an `error` property containing an array of errors.
 
 ---
 #### .directions(reqObj, callback(err, result))
@@ -99,7 +99,7 @@ bustime.directions(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `dir` property containing an array of route direction strings, and an `error` property containing an array of errors. If only one direction string is returned, it is a direct child of the `dir` property (i.e. not an array).
+Where `result` is an object with a `dir` property containing an array of route direction strings, and an `error` property containing an array of errors.
 
 Request object properties are:
 
@@ -117,7 +117,7 @@ bustime.stops(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `stop` property containing an array of stop objects, and an `error` property containing an array of errors. If only one pattern object is returned, it is a direct child of the `stop` property (i.e. not an array).
+Where `result` is an object with a `stop` property containing an array of stop objects, and an `error` property containing an array of errors.
 
 Request object properties are:
 
@@ -136,7 +136,7 @@ bustime.patterns(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `ptr` property containing an array of pattern objects, and an `error` property containing an array of errors. If only one pattern object is returned, it is a direct child of the `ptr` property (i.e. not an array).
+Where `result` is an object with a `ptr` property containing an array of pattern objects, and an `error` property containing an array of errors.
 
 Request object properties are:
 
@@ -161,7 +161,7 @@ bustime.predictions(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `prd` property containing an array of predictions, and an `error` property containing an array of errors. It may contain both properties, particularly when multiple routes or stops are sent in the query. If only one prediction or error object is returned, it is a direct child of the `prd` or `error` property (i.e. not an array).
+Where `result` is an object with a `prd` property containing an array of predictions, and an `error` property containing an array of errors. It may contain both properties, particularly when multiple routes or stops are sent in the query.
 
 Request object properties are:
 - `stpid`: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited stop numbers as a string (e.g. `'897,899'`)
@@ -186,4 +186,4 @@ bustime.serviceBulletins(reqObj, function (err, result) {
   console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `sb` property containing an array of bulletins, and an `error` property containing an array of errors. If only one bulletin or error object is returned, it is a direct child of the `sb` or `error` property (i.e. not an array).
+Where `result` is an object with a `sb` property containing an array of bulletins, and an `error` property containing an array of errors.
