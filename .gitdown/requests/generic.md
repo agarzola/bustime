@@ -3,7 +3,7 @@ The generic request method offers a barebones API request and no special service
 
 The generic `.request()` method might come in handy if you write your own BusTime-related methods and want to make them available for more than one API request type (as opposed to limiting your method to, for example, only _predictions_ or only _stops_, for example). It could also be useful if a future version of BusTime adds endpoints that this library doesn’t yet cover.
 
-#### .request(requestType, reqObj, callback(err, result))
+#### .request(requestType, reqObj, callback)
 ```javascript
 var reqObj = {}; // The contents of this object will depend on the type ↵
                  // of request you’ll be making to the BusTime API.
