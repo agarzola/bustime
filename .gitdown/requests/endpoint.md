@@ -161,7 +161,7 @@ bustime.predictions(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `prd` property containing an array of prediction objects, and an `error` property containing an array of errors. It may contain both properties, particularly when multiple routes or stops are sent in the query.
+Where `result` is an object with a `prd` property containing an array of prediction objects, and an `error` property containing an array of error objects. It may contain both properties, particularly when multiple routes or stops are sent in the query.
 
 Request object properties are:
 - `stpid`: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited stop numbers as a string (e.g. `'897,899'`)
@@ -186,4 +186,4 @@ bustime.serviceBulletins(reqObj, function (err, result) {
   console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `sb` property containing an array of bulletin objects, and an `error` property containing an array of errors.
+Where `result` is an object with a `sb` property containing an array of bulletin objects, and an `error` property containing an array of error objects.
