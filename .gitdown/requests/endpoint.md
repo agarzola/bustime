@@ -15,7 +15,7 @@ I’ve omitted the `validate` property from the descriptions below for the sake 
 
 ---
 
-#### .time(reqObj, callback(err, result))
+#### .time(reqObj, callback)
 ```javascript
 var reqObj = {
   services: {
@@ -60,7 +60,7 @@ Services available:
 ```
 
 ---
-#### .vehicles(reqObj, callback(err, result))
+#### .vehicles(reqObj, callback)
 ```javascript
 var reqObj = {
   rt: route_number, // optional, not available w/vid
@@ -72,7 +72,7 @@ bustime.vehicles(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `vehicle` property containing an array of vehicle objects, and an `error` property containing an array of errors.
+Where `result` is an object with a `vehicle` property containing an array of vehicle objects, and an `error` property containing an array of error objects.
 
 Request object properties are:
 - `rt`: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'4,9'`)
@@ -80,16 +80,16 @@ Request object properties are:
 - `tmres`: time stamp resolution. Set to `'s'` to get time resolution to the second. Set to `'m'` to get time resolution to the minute. Defaults to `'m'`.
 
 ---
-#### .routes(reqObj, callback(err, result))
+#### .routes(reqObj, callback)
 ```javascript
 bustime.routes(null, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `route` property containing an array of route objects, and an `error` property containing an array of errors.
+Where `result` is an object with a `route` property containing an array of route objects, and an `error` property containing an array of error objects.
 
 ---
-#### .directions(reqObj, callback(err, result))
+#### .directions(reqObj, callback)
 ```javascript
 var reqObj = {
   rt: route_number // required
@@ -99,14 +99,14 @@ bustime.directions(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `dir` property containing an array of route direction strings, and an `error` property containing an array of errors.
+Where `result` is an object with a `dir` property containing an array of route direction strings, and an `error` property containing an array of error objects.
 
 Request object properties are:
 
 - `rt`: route number(s). Can be an Integer or String. May only be one route number.
 
 ---
-#### .stops(reqObj, callback(err, result))
+#### .stops(reqObj, callback)
 ```javascript
 var reqObj = {
   rt: route_number, // required
@@ -117,7 +117,7 @@ bustime.stops(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `stop` property containing an array of stop objects, and an `error` property containing an array of errors.
+Where `result` is an object with a `stop` property containing an array of stop objects, and an `error` property containing an array of error objects.
 
 Request object properties are:
 
@@ -125,7 +125,7 @@ Request object properties are:
 - `dir`: direction(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. `'0,1'`)
 
 ---
-#### .patterns(reqObj, callback(err, result))
+#### .patterns(reqObj, callback)
 ```javascript
 var reqObj = {
   rt: route_number, // optional, not available w/pid
@@ -136,7 +136,7 @@ bustime.patterns(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `ptr` property containing an array of pattern objects, and an `error` property containing an array of errors.
+Where `result` is an object with a `ptr` property containing an array of pattern objects, and an `error` property containing an array of error objects.
 
 Request object properties are:
 
@@ -144,7 +144,7 @@ Request object properties are:
 - `pid`: pattern ID(s). Can be an Integer or String. May include multiple, comma-delimited pattern ID numbers as a string (e.g. `'897,899'`)
 
 ---
-#### .predictions(reqObj, callback(err, result))
+#### .predictions(reqObj, callback)
 ```javascript
 var reqObj = {
   stpid: stop_id,       // optional, not available w/vid
@@ -161,7 +161,7 @@ bustime.predictions(reqObj, function (err, result) {
     console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `prd` property containing an array of predictions, and an `error` property containing an array of errors. It may contain both properties, particularly when multiple routes or stops are sent in the query.
+Where `result` is an object with a `prd` property containing an array of prediction objects, and an `error` property containing an array of errors. It may contain both properties, particularly when multiple routes or stops are sent in the query.
 
 Request object properties are:
 - `stpid`: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited stop numbers as a string (e.g. `'897,899'`)
@@ -174,7 +174,7 @@ Services available:
 - `calculateETA`: Boolean, defaults to false. If true, calculates the estimated time of arrival of each prediction in milliseconds and includes it in that prediction’s `eta` property. _(This option works best when `tmres` is set to `'s'`.)_
 
 ---
-#### .serviceBulletins(reqObj, callback(err, result))
+#### .serviceBulletins(reqObj, callback)
 ```javascript
 var reqObj = {
   rt: route_number,     // required if stpid not specified
@@ -186,4 +186,4 @@ bustime.serviceBulletins(reqObj, function (err, result) {
   console.log(JSON.stringify(result, null, 2));
 });
 ```
-Where `result` is an object with a `sb` property containing an array of bulletins, and an `error` property containing an array of errors.
+Where `result` is an object with a `sb` property containing an array of bulletin objects, and an `error` property containing an array of errors.
