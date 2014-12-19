@@ -42,8 +42,8 @@ var bustimeInit = function (apiObj) {
       requests.specialMethod('serviceBulletins', reqObj, callback);
     },
 
-    collectRoutesAndStops: function(callback) {
-      utility.collectRoutesAndStops(callback);
+    collectRoutesAndStops: function(callback, config) {
+      utility.collectRoutesAndStops(callback, config);
     }
   }
 }

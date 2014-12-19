@@ -27,8 +27,8 @@ describe('Utility', function () {
     ]
   }
 
-  describe('specialMethod()', function () {
-    it('should produce a collection of routes with embedded directions and stops', function (done) {
+  describe('collectRoutesAndStops()', function () {
+    it('should produce an array of routes with embedded directions and stops', function (done) {
       this.timeout(10000);
       var utilityObj = proxyquire('../lib/utility', {
                       './requests': function () {
@@ -60,6 +60,60 @@ describe('Utility', function () {
           });
         }
       });
+    });
+
+    it('should produce an object of routes with embedded directions and stops', function (done) {
+      this.timeout(10000);
+      var utilityObj = proxyquire('../lib/utility', {
+                      './requests': function () {
+                        return {
+                          specialMethod: function (a, b, c) {
+                            c(null, fakeData);
+                          }
+                        }
+                      },
+                      '@runtimeGlobal': true
+                    });
+
+      var utility = utilityObj(null);
+      utility.collectRoutesAndStops(function (err, result) {
+        if (err) {
+          return done(err);
+        } else {
+          var schema = Joi.object().keys({
+            '7': Joi.object().keys({
+              rt: Joi.string().required(),
+              rtnm: Joi.string().required(),
+              rtclr: Joi.string().required(),
+              dir: Joi.array().includes(Joi.object().keys({
+                id: Joi.string(),
+                stops: Joi.array().includes(Joi.object()).required()
+              })).required()
+            }),
+            '2': Joi.object().keys({
+              rt: Joi.string().required(),
+              rtnm: Joi.string().required(),
+              rtclr: Joi.string().required(),
+              dir: Joi.array().includes(Joi.object().keys({
+                id: Joi.string(),
+                stops: Joi.array().includes(Joi.object()).required()
+              })).required()
+            }),
+            '4': Joi.object().keys({
+              rt: Joi.string().required(),
+              rtnm: Joi.string().required(),
+              rtclr: Joi.string().required(),
+              dir: Joi.array().includes(Joi.object().keys({
+                id: Joi.string(),
+                stops: Joi.array().includes(Joi.object()).required()
+              })).required()
+            }),
+          });
+          Joi.validate(result, schema, function (err, validated) {
+            done(err);
+          });
+        }
+      }, { format: 'object' });
     });
 
     it('should return an error if specialMethod() results in error', function (done) {
