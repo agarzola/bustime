@@ -1,0 +1,470 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>bustime by agarzola</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>bustime</h1>
+        <p>An abstraction of the Clever Devices BusTime developer API</p>
+
+        <p class="view"><a href="https://github.com/agarzola/bustime">View the Project on GitHub <small>agarzola/bustime</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/agarzola/bustime/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/agarzola/bustime/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/agarzola/bustime">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="bustime" class="anchor" href="#bustime" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>bustime</h1>
+
+<p>An abstraction of the Clever Devices <a href="http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf">BusTime API</a>, used by transit authorities across the U.S. <code>bustime</code> takes parameter values as a JavaScript object and returns the API’s response also as an object. You need not worry about generating query parameters or parsing XML responses! Yay!</p>
+
+<p>Now with <a href="#utility-methods">utility methods</a> to help you mine data from your API!</p>
+
+<p><strong>::::::::::::::: Probably not production ready! (But it’s close!) :::::::::::::::</strong></p>
+
+<h1>
+<a id="contents" class="anchor" href="#contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contents</h1>
+
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li>
+<a href="#request-methods">Request methods</a>
+
+<ul>
+<li>
+<a href="#request-methods-1-endpoint-specific-methods">1. Endpoint-specific methods</a>
+
+<ul>
+<li><a href="#request-methods-1-endpoint-specific-methods--time-reqobj-callback-">.time(reqObj, callback)</a></li>
+<li><a href="#request-methods-1-endpoint-specific-methods--vehicles-reqobj-callback-">.vehicles(reqObj, callback)</a></li>
+<li><a href="#request-methods-1-endpoint-specific-methods--routes-reqobj-callback-">.routes(reqObj, callback)</a></li>
+<li><a href="#request-methods-1-endpoint-specific-methods--directions-reqobj-callback-">.directions(reqObj, callback)</a></li>
+<li><a href="#request-methods-1-endpoint-specific-methods--stops-reqobj-callback-">.stops(reqObj, callback)</a></li>
+<li><a href="#request-methods-1-endpoint-specific-methods--patterns-reqobj-callback-">.patterns(reqObj, callback)</a></li>
+<li><a href="#request-methods-1-endpoint-specific-methods--predictions-reqobj-callback-">.predictions(reqObj, callback)</a></li>
+<li><a href="#request-methods-1-endpoint-specific-methods--servicebulletins-reqobj-callback-">.serviceBulletins(reqObj, callback)</a></li>
+</ul>
+</li>
+<li>
+<a href="#request-methods-2-generic-request-method">2. Generic request method</a>
+
+<ul>
+<li><a href="#request-methods-2-generic-request-method--request-requesttype-reqobj-callback-">.request(requestType, reqObj, callback)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#utility-methods">Utility methods</a>
+
+<ul>
+<li><a href="#utility-methods--collectroutesandstops-callback-config-">.collectRoutesAndStops(callback[, config])</a></li>
+</ul>
+</li>
+<li><a href="#what-about-the-browser-">What about the browser?</a></li>
+</ul>
+
+<hr>
+
+<h2 id="installation">
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<div class="highlight highlight-source-shell"><pre>$ npm install bustime</pre></div>
+
+<p><em>(You probably want to <code>--save</code> it as a dependency, but I ain’t the boss of you.)</em></p>
+
+<h2 id="usage">
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Before you require <code>bustime</code>, you should create an object with at least your API key and the host. This object is then passed as an argument of require, like so:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> bustime <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>bustime<span class="pl-pds">'</span></span>);
+
+<span class="pl-k">var</span> apiObj <span class="pl-k">=</span> {
+    key<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>your_api_key<span class="pl-pds">'</span></span>,       <span class="pl-c">// required</span>
+    host<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>your_api_host.com<span class="pl-pds">'</span></span>, <span class="pl-c">// required</span>
+    localestring<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>lang<span class="pl-pds">'</span></span>,      <span class="pl-c">// optional, default is whatever the BusTime ↵</span>
+                               <span class="pl-c">// API you’re accessing is set to</span>
+    port<span class="pl-k">:</span> <span class="pl-c1">80</span>,                  <span class="pl-c">// optional, default is 80</span>
+    path<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>/path/to/api<span class="pl-pds">'</span></span>       <span class="pl-c">// optional, default is '/bustime/api/v1'</span>
+}
+
+<span class="pl-k">var</span> bustime <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>bustime<span class="pl-pds">'</span></span>)(apiObj);</pre></div>
+
+<h2 id="request-methods">
+<a id="request-methods" class="anchor" href="#request-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Request methods</h2>
+
+<p>There are two ways to make requests to the API using this library:</p>
+
+<ol>
+<li>
+<strong>Using an endpoint-specific method:</strong> This is the preferred way if you’d like to use the added services that <code>bustime</code> offers for each. For example, all endpoint-specific methods validate your request parameter object by default according to the needs of that endpoint, to avoid faulty requests made to the API (this can be turned off by on a per-method basis). Additionally, some of the methods offer special services that you can choose to turn on.</li>
+<li>
+<strong>Using the generic <code>.request()</code> method:</strong> This method makes a request to the API and converts the XML response into a JavaScript object. It offers nothing more than that. This is the method that each of the dedicated methods described above use to make requests between validating and performing additional services on the resulting data.</li>
+</ol>
+
+<hr>
+
+<h3 id="request-methods-1-endpoint-specific-methods">
+<a id="1-endpoint-specific-methods" class="anchor" href="#1-endpoint-specific-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. Endpoint-specific methods</h3>
+
+<p>Below are the methods dedicated to specific endpoints on the BusTime API. Each has its own request object requirements. This object (sans the <code>services</code> property pertaining to <code>bustime</code>’s services) is translated directly to the querystring in the request to the API. See the <a href="http://bustracker.gocarta.org/bustime/apidoc/v1/DeveloperAPIGuide.pdf">BusTime Developer API Guide</a> for more information on each parameter.</p>
+
+<p><strong>A note on validation:</strong> Each endpoint-specific method below validates your <code>reqObj</code> object by default. When your object fails validation, an error is returned to your callback and the request to the BusTime API is aborted. To turn off validation (not that you’d ever want to), include a <code>validate</code> property set to <code>false</code> within the <code>services</code> property of your request object, like so:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {
+  <span class="pl-c">// ... your other properties ... //</span>
+  services<span class="pl-k">:</span> {
+    validate<span class="pl-k">:</span> <span class="pl-c1">false</span>
+  }
+}</pre></div>
+
+<p>I’ve omitted the <code>validate</code> property from the descriptions below for the sake of being succinct. Just know that it’s available in each of these endpoint-specific methods.</p>
+
+<hr>
+
+<h4 id="request-methods-1-endpoint-specific-methods--time-reqobj-callback-">
+<a id="timereqobj-callback" class="anchor" href="#timereqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.time(reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {
+  services<span class="pl-k">:</span> {
+    moment<span class="pl-k">:</span> <span class="pl-c1">true</span> <span class="pl-c">// optional</span>
+  }
+}
+
+<span class="pl-smi">bustime</span>.<span class="pl-en">time</span>(reqObj, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Services available:</p>
+
+<ul>
+<li>
+<code>moment</code>: Boolean, defaults to false. If true, includes the time as a <a href="http://momentjs.com/">moment.js</a> object in <code>result.moment</code>.</li>
+</ul>
+
+<p><code>result</code> is an object with a <code>tm</code> property containing the API’s time in YYYYMMDD HH:MM:SS format, and an <code>error</code> property containing an array of errors. Like so:</p>
+
+<div class="highlight highlight-source-js"><pre>{ tm<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>20141127 10:07:30<span class="pl-pds">'</span></span>,
+  moment<span class="pl-k">:</span>
+   { _isAMomentObject<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+     _i<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>20141127 10:07:30<span class="pl-pds">'</span></span>,
+     _f<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>YYYYMMDD HH:mm:ss<span class="pl-pds">'</span></span>,
+     _isUTC<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+     _pf<span class="pl-k">:</span>
+      { empty<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        unusedTokens<span class="pl-k">:</span> [],
+        unusedInput<span class="pl-k">:</span> [],
+        overflow<span class="pl-k">:</span> <span class="pl-k">-</span><span class="pl-c1">1</span>,
+        charsLeftOver<span class="pl-k">:</span> <span class="pl-c1">0</span>,
+        nullInput<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        invalidMonth<span class="pl-k">:</span> <span class="pl-c1">null</span>,
+        invalidFormat<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        userInvalidated<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        iso<span class="pl-k">:</span> <span class="pl-c1">false</span> },
+     _locale<span class="pl-k">:</span>
+      { _ordinalParse<span class="pl-k">:</span><span class="pl-sr"> <span class="pl-pds">/</span><span class="pl-c1">\d</span><span class="pl-k">{1,2}</span>(th<span class="pl-k">|</span>st<span class="pl-k">|</span>nd<span class="pl-k">|</span>rd)<span class="pl-pds">/</span></span>,
+        ordinal<span class="pl-k">:</span> [<span class="pl-c1">Function</span>],
+        _abbr<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en<span class="pl-pds">'</span></span>,
+        _ordinalParseLenient<span class="pl-k">:</span><span class="pl-sr"> <span class="pl-pds">/</span><span class="pl-c1">\d</span><span class="pl-k">{1,2}</span>(th<span class="pl-k">|</span>st<span class="pl-k">|</span>nd<span class="pl-k">|</span>rd)<span class="pl-k">|</span><span class="pl-c1">\d</span><span class="pl-k">{1,2}</span><span class="pl-pds">/</span></span> },
+     _d<span class="pl-k">:</span> Thu Nov <span class="pl-c1">27</span> <span class="pl-c1">2014</span> <span class="pl-c1">10</span><span class="pl-k">:</span><span class="pl-c1">07</span><span class="pl-k">:</span><span class="pl-c1">30</span> <span class="pl-c1">GMT</span><span class="pl-k">-</span><span class="pl-ii">0500</span> (<span class="pl-c1">EST</span>) } }</pre></div>
+
+<hr>
+
+<h4 id="request-methods-1-endpoint-specific-methods--vehicles-reqobj-callback-">
+<a id="vehiclesreqobj-callback" class="anchor" href="#vehiclesreqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.vehicles(reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {
+  rt<span class="pl-k">:</span> route_number, <span class="pl-c">// optional, not available w/vid</span>
+  vid<span class="pl-k">:</span> vehicle_id,  <span class="pl-c">// optional, not available w/rt</span>
+  tmres<span class="pl-k">:</span> resolution <span class="pl-c">// optional, defaults to 'm'</span>
+}
+
+<span class="pl-smi">bustime</span>.<span class="pl-en">vehicles</span>(reqObj, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Where <code>result</code> is an object with a <code>vehicle</code> property containing an array of vehicle objects, and an <code>error</code> property containing an array of error objects.</p>
+
+<p>Request object properties are:</p>
+
+<ul>
+<li>
+<code>rt</code>: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. <code>'4,9'</code>)</li>
+<li>
+<code>vid</code>: vehicle ID(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. <code>'128,506'</code>)</li>
+<li>
+<code>tmres</code>: time stamp resolution. Set to <code>'s'</code> to get time resolution to the second. Set to <code>'m'</code> to get time resolution to the minute. Defaults to <code>'m'</code>.</li>
+</ul>
+
+<hr>
+
+<h4 id="request-methods-1-endpoint-specific-methods--routes-reqobj-callback-">
+<a id="routesreqobj-callback" class="anchor" href="#routesreqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.routes(reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">bustime</span>.<span class="pl-en">routes</span>(<span class="pl-c1">null</span>, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Where <code>result</code> is an object with a <code>route</code> property containing an array of route objects, and an <code>error</code> property containing an array of error objects.</p>
+
+<hr>
+
+<h4 id="request-methods-1-endpoint-specific-methods--directions-reqobj-callback-">
+<a id="directionsreqobj-callback" class="anchor" href="#directionsreqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.directions(reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {
+  rt<span class="pl-k">:</span> route_number <span class="pl-c">// required</span>
+}
+
+<span class="pl-smi">bustime</span>.<span class="pl-en">directions</span>(reqObj, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Where <code>result</code> is an object with a <code>dir</code> property containing an array of route direction strings, and an <code>error</code> property containing an array of error objects.</p>
+
+<p>Request object properties are:</p>
+
+<ul>
+<li>
+<code>rt</code>: route number(s). Can be an Integer or String. May only be one route number.</li>
+</ul>
+
+<hr>
+
+<h4 id="request-methods-1-endpoint-specific-methods--stops-reqobj-callback-">
+<a id="stopsreqobj-callback" class="anchor" href="#stopsreqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.stops(reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {
+  rt<span class="pl-k">:</span> route_number, <span class="pl-c">// required</span>
+  dir<span class="pl-k">:</span> direction    <span class="pl-c">// required</span>
+}
+
+<span class="pl-smi">bustime</span>.<span class="pl-en">stops</span>(reqObj, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Where <code>result</code> is an object with a <code>stop</code> property containing an array of stop objects, and an <code>error</code> property containing an array of error objects.</p>
+
+<p>Request object properties are:</p>
+
+<ul>
+<li>
+<code>rt</code>: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. <code>'33,34'</code>)</li>
+<li>
+<code>dir</code>: direction(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. <code>'0,1'</code>)</li>
+</ul>
+
+<hr>
+
+<h4 id="request-methods-1-endpoint-specific-methods--patterns-reqobj-callback-">
+<a id="patternsreqobj-callback" class="anchor" href="#patternsreqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.patterns(reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {
+  rt<span class="pl-k">:</span> route_number, <span class="pl-c">// optional, not available w/pid</span>
+  pid<span class="pl-k">:</span> direction    <span class="pl-c">// optional, not available w/rt</span>
+}
+
+<span class="pl-smi">bustime</span>.<span class="pl-en">patterns</span>(reqObj, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Where <code>result</code> is an object with a <code>ptr</code> property containing an array of pattern objects, and an <code>error</code> property containing an array of error objects.</p>
+
+<p>Request object properties are:</p>
+
+<ul>
+<li>
+<code>rt</code>: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. <code>'33,34'</code>)</li>
+<li>
+<code>pid</code>: pattern ID(s). Can be an Integer or String. May include multiple, comma-delimited pattern ID numbers as a string (e.g. <code>'897,899'</code>)</li>
+</ul>
+
+<hr>
+
+<h4 id="request-methods-1-endpoint-specific-methods--predictions-reqobj-callback-">
+<a id="predictionsreqobj-callback" class="anchor" href="#predictionsreqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.predictions(reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {
+  stpid<span class="pl-k">:</span> stop_id,       <span class="pl-c">// optional, not available w/vid</span>
+  rt<span class="pl-k">:</span> route_number,     <span class="pl-c">// optional, requires stpid</span>
+  vid<span class="pl-k">:</span> vehicle_id,      <span class="pl-c">// optional, not available w/stpid</span>
+  top<span class="pl-k">:</span> max_predictions, <span class="pl-c">// optional, max number of predictions</span>
+  tmres<span class="pl-k">:</span> resolution     <span class="pl-c">// optional, defaults to 'm'</span>
+  services<span class="pl-k">:</span> {
+    calculateETA<span class="pl-k">:</span> <span class="pl-c1">true</span>  <span class="pl-c">// optional, defaults to false</span>
+  }
+}
+
+<span class="pl-smi">bustime</span>.<span class="pl-en">predictions</span>(reqObj, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Where <code>result</code> is an object with a <code>prd</code> property containing an array of prediction objects, and an <code>error</code> property containing an array of error objects. It may contain both properties, particularly when multiple routes or stops are sent in the query.</p>
+
+<p>Request object properties are:</p>
+
+<ul>
+<li>
+<code>stpid</code>: stop ID(s). Can be an Integer or String. May include multiple, comma-delimited stop numbers as a string (e.g. <code>'897,899'</code>)</li>
+<li>
+<code>rt</code>: route number(s). Can be an Integer or String. May include multiple, comma-delimited route numbers as a string (e.g. <code>'33,34'</code>)</li>
+<li>
+<code>vid</code>: vehicle ID(s). Can be an Integer or String. May include multiple, comma-delimited vehicle numbers as a string (e.g. <code>'452,191'</code>)</li>
+<li>
+<code>top</code>: max number of predictions. Must be an Integer</li>
+<li>
+<code>tmres</code>: time stamp resolution. Set to <code>'s'</code> to get time resolution to the second. Set to <code>'m'</code> to get time resolution to the minute. Defaults to <code>'m'</code>. <em>(This option is not documented in the BusTime documentation for the <code>/getpredictions</code> endpoint, but seems to work anyway.)</em>
+</li>
+</ul>
+
+<p>Services available:</p>
+
+<ul>
+<li>
+<code>calculateETA</code>: Boolean, defaults to false. If true, calculates the estimated time of arrival of each prediction in milliseconds and includes it in that prediction’s <code>eta</code> property. <em>(This option works best when <code>tmres</code> is set to <code>'s'</code>.)</em>
+</li>
+</ul>
+
+<hr>
+
+<h4 id="request-methods-1-endpoint-specific-methods--servicebulletins-reqobj-callback-">
+<a id="servicebulletinsreqobj-callback" class="anchor" href="#servicebulletinsreqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.serviceBulletins(reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {
+  rt<span class="pl-k">:</span> route_number,     <span class="pl-c">// required if stpid not specified</span>
+  rtdir<span class="pl-k">:</span> route_dir,     <span class="pl-c">// optional, requires rt property</span>
+  stpid<span class="pl-k">:</span> stop_id        <span class="pl-c">// required if rt not specified</span>
+}
+
+<span class="pl-smi">bustime</span>.<span class="pl-en">serviceBulletins</span>(reqObj, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Where <code>result</code> is an object with a <code>sb</code> property containing an array of bulletin objects, and an <code>error</code> property containing an array of error objects.</p>
+
+<hr>
+
+<h3 id="request-methods-2-generic-request-method">
+<a id="2-generic-request-method" class="anchor" href="#2-generic-request-method" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. Generic request method</h3>
+
+<p>The generic request method offers a barebones API request and no special services. It is up to you to set the request type as a string in the first argument. Like the endpoint-specific methods, it responds with a JavaScript object.</p>
+
+<p>The generic <code>.request()</code> method might come in handy if you write your own BusTime-related methods and want to make them available for more than one API request type (as opposed to limiting your method to, for example, only <em>predictions</em> or only <em>stops</em>, for example). It could also be useful if a future version of BusTime adds endpoints that this library doesn’t yet cover.</p>
+
+<h4 id="request-methods-2-generic-request-method--request-requesttype-reqobj-callback-">
+<a id="requestrequesttype-reqobj-callback" class="anchor" href="#requestrequesttype-reqobj-callback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.request(requestType, reqObj, callback)</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> reqObj <span class="pl-k">=</span> {}; <span class="pl-c">// The contents of this object will depend on the type ↵</span>
+                 <span class="pl-c">// of request you’ll be making to the BusTime API.</span>
+
+<span class="pl-k">var</span> requestType <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>getpredictions<span class="pl-pds">'</span></span>; <span class="pl-c">// requires one of the BusTime request types</span>
+
+<span class="pl-smi">bustime</span>.<span class="pl-en">request</span>(requestType, reqObj, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">result</span>) {
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-c1">JSON</span>.<span class="pl-en">stringify</span>(result, <span class="pl-c1">null</span>, <span class="pl-c1">2</span>));
+});</pre></div>
+
+<p>Where <code>result</code> is an object like the one you would get from any of the endpoint-specific methods described above.</p>
+
+<p>Options for <code>requestType</code> are: <code>'gettime'</code>, <code>'getvehicles'</code>, <code>'getroutes'</code>, <code>'getdirections'</code>, <code>'getstops'</code>, <code>'getpatterns'</code>, <code>'getpredictions'</code>, <code>'getservicebulletins'</code>.</p>
+
+<hr>
+
+<h2 id="utility-methods">
+<a id="utility-methods" class="anchor" href="#utility-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Utility methods</h2>
+
+<p><code>bustime</code> also offers a method for collecting data from the BusTracker API to store in memory or commit to a file for later use in your app. There is only one such method at the moment, but more may be added in the future. <a href="https://github.com/agarzola/bustime/issues">Open an issue</a> if there’s a specific utility you’d like to see implemented.</p>
+
+<h3 id="utility-methods--collectroutesandstops-callback-config-">
+<a id="collectroutesandstopscallback-config" class="anchor" href="#collectroutesandstopscallback-config" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.collectRoutesAndStops(callback[, config])</h3>
+
+<p>This method builds a comprehensive object which includes all available routes, their directions, and every stop served by each direction in each route. This can be useful if your application needs to check whether a specific stop (or group thereof) is served by a route, or rule out a stop depending on which direction a bus is going. All information associated with routes and stops is included and left intact to make the object as useful as possible.</p>
+
+<p>By default, this method provides an array of route objects. That array looks like this:</p>
+
+<div class="highlight highlight-source-js"><pre>[
+  { rt<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>,
+    rtnm<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>1 ALTON PARK<span class="pl-pds">'</span></span>,
+    rtclr<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#cc3399<span class="pl-pds">'</span></span>,
+    dir<span class="pl-k">:</span> [
+      { id<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>0<span class="pl-pds">'</span></span>,
+        stops<span class="pl-k">:</span> [
+          { stpid<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>1581<span class="pl-pds">'</span></span>,
+            stpnm<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>33RD + CHATTEM<span class="pl-pds">'</span></span>,
+            lat<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>35.017467535463<span class="pl-pds">'</span></span>,
+            lon<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>-85.321669578552<span class="pl-pds">'</span></span>
+          },
+          { <span class="pl-k">...</span> }
+        ]
+      },
+      { id<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>,
+        stops<span class="pl-k">:</span> [
+          { <span class="pl-k">...</span> },
+          { <span class="pl-k">...</span> }
+        ]
+      }
+    ]
+  },
+  {
+    rt<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>2<span class="pl-pds">'</span></span>,
+    <span class="pl-k">...</span>
+  }
+]</pre></div>
+
+<p>The direction <code>id</code> is set to whatever is returned by your BusTracker API. It can be a number, but also something like <code>'Inbound'</code>. This depends on how your BusTracker API is set up to identify route directions.</p>
+
+<p>Alternatively, you could pass a config object as a second argument setting the format to 'object'. This config argument and the resulting object look like this:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> config <span class="pl-k">=</span> {
+  format<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>object<span class="pl-pds">'</span></span>
+}
+
+<span class="pl-c">// Produces a slightly different object:</span>
+{
+  <span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span><span class="pl-k">:</span> {
+    rt<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>,
+    rtnm<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>1 ALTON PARK<span class="pl-pds">'</span></span>,
+    rtclr<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#cc3399<span class="pl-pds">'</span></span>,
+    dir<span class="pl-k">:</span> [ 
+      { <span class="pl-k">...</span> },
+      { <span class="pl-k">...</span> }
+    ]
+  }
+}</pre></div>
+
+<p>Note the <code>key:value</code> pairs, making it easy to reference a specific route’s data by using the route number as the key. Other than this one feature, each route’s object is identical to the ones in the array format. This formatting option just gives you a different way of referencing the resulting object.</p>
+
+<p><strong>Please note:</strong> In either case, this operation can take a while to complete (up to a few seconds, depending on your API server’s load), so it’s recommended that you run this once while booting up your app (to store in memory) or as part of a data collection script (from which you can commit it to a text file or database for later consumption). Otherwise, you risk performance issues in your application.</p>
+
+<hr>
+
+<h2 id="what-about-the-browser-">
+<a id="what-about-the-browser" class="anchor" href="#what-about-the-browser" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What about the browser?</h2>
+
+<p>I’ll be working on making this work in the browser as well. No idea when, though. For the time being, <a href="http://browserify.org/">browserify</a> might do the trick (untested). Pull requests are welcome!</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/agarzola">agarzola</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
